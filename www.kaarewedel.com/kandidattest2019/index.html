@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Analyse af Altingets Kandidattest 2019">
+    <meta name="keywords" content="d3, politik, data, dataviz, datavizualisation, DK">
+    <meta property="og:image" content="ogimg.png">
+    <meta name="author" content="Kåre Obel Wedel">
+<!--    <link rel="stylesheet" href="styles.css"> -->
+    <title>Kandidattest 2019</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Lora|Roboto&display=swap" rel="stylesheet">
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+
+<style>
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 400;
+    font-family: 'Roboto', sans-serif;
+    color: darkgrey;
+    text-align: left;
+    margin-bottom: 10px;
+    margin-top: 0px;
+    padding-top: 30px;
+}
+
+h1 {
+        font-size: 60px;
+}
+
+h2 {
+        font-size: 30px;
+}
+
+
+p, ul, li, a {
+    font-family: 'Lora', serif;
+}
+
+
+  
+#footerDiv {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+  div.outer {
+    max-width: 740px; /* some width amount needed */
+    margin: 0 auto; 
+    overflow: visible;
+}
+div.inner {
+    position:relative;
+    float: right; /* this was added and display removed */
+    right: 50%;
+}
+div.inner img {
+    position: relative; 
+    right:-50%; /* this was changed from "left" in original */
+}
+
+div.footnote {
+    max-width: 740px;
+    margin: 0 auto;
+}
+
+div.imgdiv {
+    font-style: italic;
+    font-size: small;
+    text-align: center;
+}
+figcaption {
+    font-style: italic;
+    font-size: small;
+    text-align: center;
+}
+div.tipcontainer{
+    position: absolute;
+    pointer-events: none;
+}
+div.tooltip{
+    position: relative;
+    left: -50%;
+    text-align: center;
+    max-width: 210px;
+    padding: 15px;
+    font: 14px serif;
+    background: white;
+    border: 2px;
+    border-style: solid;
+    border-color: slategray;
+    border-radius: 10px;
+    pointer-events: none;
+    transform: translate(0%, -100%) translate(-2px,-10px);
+}
+div.tooltip::after {
+  content: " ";
+  position: absolute;
+  top: 100%; /* At the bottom of the tooltip */
+  left: 50%;
+  margin-left: -10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+div.questtooltip {
+    position: absolute;			
+    text-align: center;			
+    max-width: 150px;					
+    padding: 2px;				
+    font: 12px sans-serif;		
+    background: white;	
+    border: 1px;
+    border-color: slategray;
+    border-style: solid;
+    border-radius: 8px;			
+    pointer-events: none;			
+}
+ #partiSpan {
+     font-style: italic;
+ }
+ #navnSpan{
+     font-size: 18px;
+     font-weight: bold;
+ }
+ #kredsSpan{
+     font-style: italic;
+ }
+
+
+</style>
+</head>
+
+<body>
+
+ <div class="outer">
+
+     <h1>Det Politiske Landskab 2019</h1>
+     <p>En analyse baseret på Altingets Kandidattest.</p>
+     <p>
+       Alle kandidater der har svaret på testen er repræsenteret af en cirkel. Baseret på kandidaternes svar på de tredive spørgsmål i testen er de placeret i kortet så de ligger tæt på deres meningsfæller og langt fra dem de er mest uenige med. De store cirkler er partilederne. Derudover er alle kandidaterne grupperet i alternative partier, så de er sammen med ligesindede.
+     </p>
+     <p>
+        Hold musen over en kandidat for at se hans/hendes navn og storkreds. Brug knapperne for at skifte mellem kortet og de alternative partier. Der kan vælges mellem tre forskellige projektioner i "Mapping" menuen (tryk på "Politisk Kort" efter du har valgt). En meget kort introduktion til projektionerne kan læses i den tekniske note nederst på siden.
+     </p>
+</div>
+
+
+<div class="outer">
+
+  <figure>
+    <a name='mainplot'></a>
+    <div id="controldiv"></div>
+    <svg id="mainsvg" width="1000" height="500"></svg>
+     <figcaption>Det politiske landskab.</figcaption>
+   </figure>
+
+<div id="PCAcompdiv" style="display:none">
+  <h3>Komponenterne for de tre første PCA-retninger</h3>
+  Rød betyder negativ og blå positiv. Hvis vi kigger på tredjekomponenten kan vi se at særligt spørgsmål 25 og 21 har stor betydning. De handler begge to om EU så tolkningen er at kandidater der ligger højt oppe op "PCA 1,3" overvejende er <i>imod</i> EU. Spørgsmål 10 og 12 har også en vis vægt og drejer sig om færre penge til kongehuset samt fri hash.
+
+  <figure>
+    <img src="PCA_type.svg" alt="PCA-komponenter">
+  </figure>
+</div>
+  
+<h3>Observationer</h3>
+<ul>
+  <li>Der <em>er</em> en højre- og en venstrefløj og de er klart opdelte.</li>
+  <li>Kristendemokraterne hører til på venstrefløjen og det samme gælder Klaus Riskær Pedersen.</li>
+  <li>Konservative og Venstre overlapper meget, men højrefløjen er i øvrigt splittet.</li>
+  <li>Testen fanger ikke Stram Kurs der splittes mellem DF og Nye Borgerlige (der er jo heller ikke nogen spørgsmål om hvorvidt alle muslimer skal smides ud).</li>
+</ul>   
+
+  <h2>Ved Mette hvad hun vil?</h2>
+
+     <p>
+       Vi kan sige noget om hvor <em>skråsikre</em> politikerne er ved at se på hvor stor en andel af gangene de svarer "Helt (u)enig".
+       I den ene ekstrem finder vi <strong>Frode Larsen</strong> fra Nye Borgerlige (Nordjyllands Storkreds). Han vakler ikke og svarer på yderpunkterne i samtlige spørgsmål. I den anden ende af spektreret ligger <strong>Nils Sjøberg</strong> (RV, Sydjyllands Storkreds), der hverken er helt enig eller uenig i noget som helst. Han er skarpt forfulgt af socialdemokraten <strong>Lars Aslan Rasmussen</strong> (Københavns Storkreds) der <a href="https://politiken.dk/kultur/medier/art7173249/Har-du-også-taget-en-valgtest-der-peger-på-Lars-Aslan-fra-S">tidligere er blevet udpeget som særligt vægelsindet</a> og kun er sikker på én enkelt ting.
+     </p>
+
+     <p>
+       Partiformændene (og -kvinderne) er alle sammen mere end 50% sikre i deres sag – lige bortset fra Mette Frederiksen der er markant mere moderat end resten af feltet.
+       <Figure>
+	 <img src="formandsikkerhed.svg" alt="Formandsikkerhed">
+	 <figcaption>Skråsikkerhed for partilederne.</figcaption>
+	 </figure>
+     </p>
+  
+     <p>
+       På parti-niveau ligger venstrefløjen generelt længere ude med Enhedslisten i førefeltet som dem der er mest sikre på deres principper.
+       <figure>
+	 <img src="partisikkerhed.svg" alt="Formandsikkerhed">
+	 <figcaption>Fordeling af skråsikkerheder i de enkelte partier.</figcaption>
+       </figure>
+     </p>
+
+     <h2>Er der nogen der har kigget over skulderen?</h2>
+     <p>
+     Med fire svarmuligheder på hver af de 30 spørgsmål er der 4<sup>30</sup> &asymp; 10<sup>18</sup> muligheder. Hvis vi kunne tage testen en gang i sekundet ville det tage mere end to gange universets levetid at prøve alle kombinationer Selvfølgelig svarer politikerne ikke tilfældigt – det er derfor vi har partierne – men selv hvis to politikere er enige om hvilken side af neutral de er på for alle spørgsmål er der stadig en milliard forskellige kombinationer. Næsten alle besvarelserne er også unikke, som vi skulle forvente. Der er dog fire grupper af ens besvarelser: De første tre på 7, 4 og 3 kandidater er alle nogen fra Nye Borgerlige. Den sidste gruppe er et par bestående af Mette Frederiksen og Nicolai Wammen. Jeg ved ikke hvem der har skrevet efter hvem i testen, men det er næppe tilfældigt.
+     </p>
+
+
+     <h2>Hvilke spørgsmål er de vigtigste?</h2>
+
+  <p>
+    Vi kan lave et mål for hvor vigtigt et spørgsmål er ved at se på andelen der er meget enige (\( N_{\mathrm{me}} \)) eller meget uenige (\( N_{\mathrm{mu}} \)):
+    $$ \mathrm{vigtighed} = \frac{N_\mathrm{mu} + N_\mathrm{me}}{N} $$
+    og et mål for graden af konsenus som ved at se hvor stor en del af kandidaterne der er på den samme side af neutral i forhold til spørgsmålet:
+    $$ \mathrm{konsensus} = \Bigg|\frac{(N_\mathrm{mu} + N_\mathrm{lu}) - (N_\mathrm{me} + N_\mathrm{le}) }{N} \Bigg|.$$
+  </p>
+  <p>
+    På figuren nedenfor kan vi se hvordan de tredive spørgsmål fordeler sig på de to parametre. Grøn indikerer at der er en overvægt der er enige mens rød indikerer en overvægt der er <strong>u</strong>enige i udsagnet. Det øverste venstre hjørne er der hvor der er ca. lige mange enige og uenige samt en stor andel der er <i>meget</i> det ene eller det andet. Lad os kalde det det polariserende hjørne. Her finder vi bl.a. integrationsydelsen, regionerne samt burkaer.
+    Nederste højre hjørne er omvendt der hvor kandidaterne er ret enige med hinanden, men samtidig ikke "meget" engageret. Det er blah-hjørnet. Hernede har vi f.eks. tilladelser til byggeri ved kysterne. <br/>
+    Hold musen over punkterne for at se udsagnet.
+  </p>
+     
+     <svg id='questsvg' width='800' height='500'></svg>
+     
+     <h2>Korrelationer</h2>
+
+     Hvis man mener at integrationsydelsen skal hæves (sp. 17), hvad synes man som om afkaffelse af kontanthjælpsloftet (sp. 19)? Den skal afskaffes! De to spørsmål er de stærkest korrelerede i datasættet.
+
+       <figure>
+	 <img src="corr_withbar.svg" alt="Formandsikkerhed">
+	 <figcaption>Sammenhæng mellem svarene på de forskellige spørgsmål. Rød indikere at hvis man er enig i det ene udsagn er man sandsynligvis også enig i det andet. Blå betyder at enighed i det ene medfører uenighed i det andet.</figcaption>
+       </figure>
+     <p>
+       De to spørgsmål der synes at være mindst korreleret med andre er nummer 21 og 25. De handler begge to om EU, hvilket viser at skepsis overfor EU ikke hænger sammen med ens øvrige politiske overbevisning.
+       </p>
+
+ </div>
+
+ <hr>
+ <div class="footnote">
+   <h3>Tekniske noter</h3>
+   <p>
+     Analysen er baseret på 805 folketingskandidaters besvarelser af Altingets kandidattest. Derfor en den også betinget af den måde de 30 spørgsmål er udvalgt på.
+     Der svares med mulighederne "Helt uenig", "Overvejende uenig", "Overvejende enig" og "Helt enig". De muligheder er oversat til koordinaterne -2, -1, 1 og 2 hhv. Der er brugt euklidiske afstande.
+     <br>
+     Til 2D projektionen fra det 30-dimensionelle rum er brugt to forskellige tilgange: <a href="https://lvdmaaten.github.io/tsne/">t-SNE</a> algoritmen og <a href="https://en.wikipedia.org/wiki/Principal_component_analysis">Principal Component Analysis</a>. For at bibeholde mest mulig global information er t-SNE initialiseret fra en PCA projektion.
+     Meget kort fortalt prøver t-SNE at placere lignende punkter tæt på hinanden mens den ikke bekymrer sig så meget om det der langt væk. PCA er en direkte projektion ind på de retninger hvor dataen har størst varians sådan at hver PCA komponent er vinkelret på de andre.
+     Se komponenterne fra PCA ved at klikke <a id="showPCAcomp" title="Klik for at vise PCA komponenterne"
+ href="#mainplot" onclick="showPCA();return false;">her</a> (de dukker op under kortet øverst).
+     Clustering er lavet med <a href="https://en.wikipedia.org/wiki/K-means_clustering">K-means</a> med de eksisterende particentre som udgangspunkt. Kode kan findes <a href="https://github.com/kwedel/kandidattest2019">her</a> (men den er ret rodet).
+   </p>
+   <p>
+     Alt arbejdet er udført af Kåre Obel Wedel. Ved brug andetsteds bedes henvises til denne side.
+     <br>
+     Kontakt: <a href="mailto:hi@kaarewedel.com">hi@kaarewedel.com</a>
+   </p>
+ </div>
+
+</body>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.3.2/d3-annotation.min.js"></script>
+<script src="script.js"></script>
+<script src="questscript.js"></script>
+<script>
+  function showPCA() {
+      var x = document.getElementById("PCAcompdiv");
+      if (x.style.display == "none") {
+	  x.style.display = "block";
+      } else {
+	  x.style.display = "none";
+      }
+  }
+</script>
+</html>

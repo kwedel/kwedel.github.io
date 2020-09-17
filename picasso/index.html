@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+ .axis path,
+ .axis line {
+     fill: none;
+     stroke: #000;
+     shape-rendering: crispEdges;
+ }
+
+ .axis text {
+     font: 16px serif;
+ }
+
+ .axis-label {
+     font: 20px serif;
+ }
+
+ .mylabel text{
+     font: 10px sans-serif;
+ }
+
+ .cells path {
+     fill: none;
+     pointer-events: all;
+ }
+
+ .cells :hover circle {
+     stroke: red;
+ }
+
+ div.tooltip{
+     position: absolute;
+     text-align: center;
+     width: 210px;
+     padding: 5px;
+     font: 18px serif;
+     font-weight: bold;
+     background: white;
+     border: 1px;
+     border-style: solid;
+     border-color: slategray;
+     border-radius: 10px;
+     pointer-events: none;
+ }
+
+ .tooltipyear {
+     font: 28px sans-serif;
+     color: gray;
+ }
+
+ div.palettebox{
+     margin: auto;
+     width: 200px;
+ }
+
+ div.palette{
+     width: 40px;
+     height: 40px;
+     float: left;
+     pointer-events: none;
+ }
+
+</style>
+
+<title>Picasso colors</title>
+
+<body>
+    <h1>The paintings and colors of Picasso</h1>
+    This is some text<br/>
+    <div class="tooltip" style="opacity: 0"></div>
+</body>
+
+<svg width="1000" height="400"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+
+ //var div = d3.select("body").append("div")
+ //    .attr("class", "tooltip")
+ //    .style("opacity", 0);
+
+ var svg = d3.select("svg"),
+     margin = {top: 40, right: 40, bottom: 40, left: 40},
+     width = svg.attr("width") - margin.left - margin.right,
+     height = svg.attr("height") - margin.top - margin.bottom;
+
+ var defs = svg.append('defs');
+
+ var formatValue = d3.format("i");
+
+ var x = d3.scaleLinear()
+	   .rangeRound([0, width]);
+
+ var g = svg.append("g")
+	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+ d3.csv("paintings.csv", type, function(error, data) {
+     if (error) throw error;
+
+     x.domain(d3.extent(data, function(d) { return d.year; }));
+
+     var simulation = d3.forceSimulation(data)
+			.force("x", d3.forceX(function(d) { return x(d.year); }).strength(1))
+			.force("y", d3.forceY(height / 2).strength(0.1))
+			.force("collide", d3.forceCollide(function(d) { return 3+d.size;}))
+			.stop();
+
+     for (var i = 0; i < 220; ++i) simulation.tick();
+
+     g.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).ticks(20,"i").tickSize(0));
+
+     g.append('text')
+      .attr('transform', `translate(${width / 2} ${height})`)
+      .attr('dy', 40) // adjust distance from the bottom edge
+      .attr('class', 'axis-label')
+      .attr('text-anchor', 'middle')
+      .text('Year');
+
+     const periods = [[1901, 1904],[1904,1906],[1906,1909],[1908,1914],[1917,1925],[1925,1932],[1933,1973]];
+     const periodnames = ['Blue Period', 'Rose Period', 'African Period', 'Cubism', 'Neoclassicism', 'Surrealism','Late Work']
+     periods.forEach(drawline);
+
+     function drawline(d,i) {
+	 label = g.append('g')
+	 label.append("line")
+		  .attr("x1",x(d[0]-0.5))
+		  .attr("x2",x(d[1]+0.5))
+		  .style('stroke',"black")
+	 label.append('line')
+		  .attr("x1",x(d[0]-0.5))
+		  .attr("x2",x(d[0]-0.5))
+		  .attr('y1',-5)
+		  .attr('y2',5)
+		  .style('stroke',"black")
+		  .attr('transform',`translate(0,${5*Math.pow(-1,i%2)})`)
+	 label.append('line')
+		  .attr("x1",x(d[1]+0.5))
+		  .attr("x2",x(d[1]+0.5))
+		  .attr('y1',-5)
+		  .attr('y2',5)
+		  .style('stroke',"black")
+      		  .attr('transform',`translate(0,${5*Math.pow(-1,i%2)})`)
+	 var shift = 0;
+	 if (i == 0) {shift = -6;}
+	 else if (i == 2) {shift = 14;}
+	 else {shift = 0;}
+	 label.append('text')
+	      .attr('class', 'mylabel')
+	      .attr('x',x((d[1]-d[0])/2+d[0]) + shift)
+	      .attr('y',-1*Math.pow(-1,(i % 2)) * 10 + 3)
+	      .attr('text-anchor', 'middle')
+	      .text(periodnames[i])
+	 label.attr("transform", `translate(0, ${(height/8*(6*(i%2)+1))} )`)
+     };
+
+     var cell = g.append("g")
+		 .attr("class", "cells")
+		 .selectAll("g").data(d3.voronoi()
+					.extent([[-margin.left, -margin.top], [width + margin.right, height + margin.top]])
+					.x(function(d) { return d.x; })
+					.y(function(d) { return d.y; })
+					.polygons(data)).enter().append("g");
+
+     var div = d3.select("div");
+
+     cell.append("a")
+	 .attr("xlink:href", function(d) {return d.data.url;})
+	 .attr('target',"_blank")
+	 .append("circle")
+	 .attr('class', function(d) {return 'circ ' + d.data.id;})
+	 .attr("r", function(d) { return d.data.size; })
+	 .attr("cx", function(d) { return d.data.x; })
+	 .attr("cy", function(d) { return d.data.y; })
+	 .style('fill', function(d) { return d.data.color1; })
+	 .style('stroke', function(d) { return d.data.color2; })
+	 .style("filter", function(d) {return "url(#drop-shadow" + d.data.id + ")";})
+	 .style("stroke-width", 4)
+	 .on("mouseover", function(d) {
+             cell.transition()
+		 .duration(500)
+		 .ease(d3.easeLinear)
+		 .style('opacity', function(o) {return d == o ? 1 : 0.5;})
+             d3.select(this)
+		 .transition()
+		 .ease(d3.easeBackOut.overshoot(3))
+		 .duration(800)
+		 .attr("r", function(d) {return d.data.size * 2;})
+		 .style("stroke-width", 8)
+             d3.select("#drop-shadow" + d.data.id).select('feGaussianBlur')
+		 .transition()
+		 .ease(d3.easeBackOut.overshoot(3))
+		 .duration(800)
+		 .attr('stdDeviation','10')
+             d3.select(this.parentNode.parentNode).raise();
+             div.transition()
+		.duration(300)
+		.style("opacity", 1);
+             div.html(`<span class='tooltipyear'>${d.data.year}</span><br>${d.data.title}` +
+		      `<br><img src=${d.data.thumb} width='200'>`)
+		.style("left", (d3.event.pageX - 105) + "px")
+		.style("top", (d3.event.pageY + 2*d.data.size+15) + "px")
+    .append('div')
+    .attr('class','palettebox')
+    .selectAll('div')
+		.data([d.data.color1, d.data.color2, d.data.color3, d.data.color4, d.data.color5])
+		.enter().append('div')
+		.attr('class','palette')
+		.style('background-color', d => d)
+         })
+	 .on("mouseout", function(d) {
+             cell.transition()
+		 .duration(100)
+		 .style('opacity', '1')
+             d3.select(this)
+		 .transition()
+		 .duration(100)
+		 .style("stroke-width", 4)
+		 .attr("r", d => {return d.data.size;})
+             d3.select("#drop-shadow" + d.data.id).select('feGaussianBlur')
+		 .transition()
+		 .duration(100)
+		 .attr('stdDeviation','0')
+             div.transition()
+		 .duration(300)
+		 .style("opacity", 0);
+         });
+
+     var filters = defs.selectAll('filter')
+		       .data(data)
+		       .enter()
+		       .append("filter")
+		       .attr("id", function(d) {return "drop-shadow" + d.id;})
+		       .attr("height", "3")
+		       .attr('width', '3')
+		       .attr('x', '-1')
+		       .attr('y', '-1')
+     filters.append("feGaussianBlur")
+		       .attr("in", "SourceAlpha")
+		       .attr("stdDeviation", "0")
+		       .attr("result", "blur");
+     var feMerge = filters.append('feMerge');
+     feMerge.append("feMergeNode")
+	    .attr("in","blur");
+     feMerge.append("feMergeNode")
+	    .attr("in","SourceGraphic");
+     //cell.append("path")
+     //    .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
+
+     //cell.append("title")
+     //    .text(function(d) { return d.data.title + "\n" + formatValue(d.data.year); });
+ });
+
+
+ function type(d) {
+     if (!d.year) return;
+     d.year = +d.year;
+     d.size = +d.size*1.5;
+     d.url = d.url;
+     return d;
+ }
+
+</script>

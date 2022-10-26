@@ -26,14 +26,42 @@
     </style>
 </head>
 <body>
-<div id="outline-container-org7cf5061" class="outline-2">
-<h2 id="org7cf5061">Kandidattest 2022 &#x2013; Et dyk ned i dataen</h2>
-<div class="outline-text-2" id="text-org7cf5061">
+<div id="outline-container-org082b662" class="outline-2">
+<h2 id="org082b662">Kandidattest 2022 &#x2013; Et dyk ned i dataen</h2>
+<div class="outline-text-2" id="text-org082b662">
 <blockquote>
 <p>
 <b>BEMÆRK:</b> Som det meste anden politisk analyse er det følgende at betragte som <i>underholdning</i> og må ikke tages som et udtryk for nogen dybere forståelse af det politiske landskab.<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
 </p>
 </blockquote>
+
+<p>
+Så nærmer valget sig og endnu engang har DR og Altinget gjort det nemt at vælge hvem man skal stemme på: man tager simpelthen en <a href="https://www.dr.dk/nyheder/politik/folketingsvalg/kandidattest">test</a> og så er den klaret.
+Men det betyder også at de har samlet et datasæt der både indeholder demografisk information om kandidaterne og hvor størstedelen af folketingskandidaterne har svaret på politiske spørgsmål. Det data kan vi kigge nærmere på og måske lærer noget om partierne og kandidaterne.
+Ligesom <a href="https://kwedel.github.io/kandidattest2019/">sidste gang</a> har jeg scrapet alle svarene og det følgende er nogle af de pointer der kan trækkes ud af datasættet.
+</p>
+
+<p>
+I figuren med alle de små cirkler er alle kandidaterne placeret så de er i nærheden af andre de er enige med og langt fra dem de er uenige med. Desuden afspejler højre-venstre aksen <i>omtræntligt</i> den kombination af spørgsmålene hvor der er størst varians blandt kandidaterne. De tre holdninger der bidrager mest til at være mod højre i figuren er
+</p>
+<ol class="org-ol">
+<li>Ingen særlig skat på høje indkomster</li>
+<li>Ingen kvoter i bestyrelser</li>
+<li>Det er i orden at den økonomiske ulighed stiger,</li>
+</ol>
+<p>
+men næsten alle spørgsmålene har betydning for den akse. De tre der bidrager mindst til højre-venstre-aksen er hvorvidt der skal være en regering over midten, hvorvidt Danmark skal meldes ud af EU og hvorvidt udannelsespladser skal flyttes ud af de store byer.
+På den anden akse er de holdninger der bidrager mest til at være oppe
+</p>
+<ol class="org-ol">
+<li>Behold Arne-pensionen</li>
+<li>Permenent grænsekontrol til Tyskland</li>
+<li>Udannelsesinstitutioner ud af de store byer</li>
+</ol>
+
+<p>
+Datasættet viser at selvom der er mange partierne har de faktisk alle sammen deres egne kombinationer af holdninger der adskiller dem fra de andre. Ved <a href="https://kwedel.github.io/kandidattest2019/">sidste valg</a> var Konservative og Venstre meget svære at skille ad, men i år ser det ud til at Konservative har bevæget sig mere i retning af Liberal Alliance og væk fra Venstre.
+</p>
 
 
 <div class="figure">
@@ -41,16 +69,12 @@
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
-
-<p>
-Så nærmer valget sig og endnu engang har DR og Altinget gjort det nemt at vælge hvem man skal stemme på: man tager simpelthen en <a href="https://www.dr.dk/nyheder/politik/folketingsvalg/kandidattest">test</a> og så er den klaret.
-Men det betyder også at de har samlet et datasæt der bøde indeholder demografisk information om kandidaterne og hvor størstedelen af folketingskandidaterne har svaret på politiske spørgsmål. Det data kan vi kigge nærmere på og måske lærer noget om partierne og kandidaterne.
-</p>
 </div>
 
-<div id="outline-container-orgbbebd9e" class="outline-3">
-<h3 id="orgbbebd9e">Partiernes gennemsnitsholdning</h3>
-<div class="outline-text-3" id="text-orgbbebd9e">
+
+<div id="outline-container-org1a7f4f4" class="outline-3">
+<h3 id="org1a7f4f4">Partiernes gennemsnitsholdning</h3>
+<div class="outline-text-3" id="text-org1a7f4f4">
 <p>
 Alle kandidater har svaret individuelt, men det kan være interessant at se hvordan holdningerne fordeler sig inden for de enkelte partier. Den følgende figur viser gennemsnits-svaret for hvert af partierne på hvert af de 25 spørgsmål i testen. Svarene er beregnet sådan at de fire muligheder, uenig, lidt uenig, lidt enig og enig er blevet omregnet til værdier -2, -1, 1 og 2 hvorefter gennemsnittet er beregnet.
 <object type="image/svg+xml" data="images/gennemsnitssvar.svg" class="org-svg">
@@ -59,9 +83,9 @@ Sorry, your browser does not support SVG.</object>
 </div>
 </div>
 
-<div id="outline-container-org55bf0b8" class="outline-3">
-<h3 id="org55bf0b8">Partiernes sammensætning</h3>
-<div class="outline-text-3" id="text-org55bf0b8">
+<div id="outline-container-org278ee8b" class="outline-3">
+<h3 id="org278ee8b">Partiernes sammensætning</h3>
+<div class="outline-text-3" id="text-org278ee8b">
 <p>
 Datasættet indeholder også data om kandidaternes alder og uddannelsesniveau. Hvis vi starter med uddannelsen kan vi se at de radikale virkelig har fået brugt noget tid på uddannelsesinstitutionerne. Omvendt synes det ikke at være der tiden er brugt blandt den del af højrefløjen der har det lidt svært med folk fra udlandet.
 <object type="image/svg+xml" data="images/education_length.svg" class="org-svg">
@@ -76,9 +100,9 @@ Sorry, your browser does not support SVG.</object>
 </div>
 </div>
 
-<div id="outline-container-orgbf8fc0b" class="outline-3">
-<h3 id="orgbf8fc0b">Skråsikkerhed</h3>
-<div class="outline-text-3" id="text-orgbf8fc0b">
+<div id="outline-container-org393d897" class="outline-3">
+<h3 id="org393d897">Skråsikkerhed</h3>
+<div class="outline-text-3" id="text-org393d897">
 <p>
 Vi kan definere skråsikkerheden som den andel af svar hvor kandidaten er enten helt enig eller helt uenig. Lars Løkke og Mette Frederiksen har ikke svaret på spørgsmålene, hvorfor de vises med skårsikkerhed nul.
 <object type="image/svg+xml" data="images/leader_certainty.svg" class="org-svg">
@@ -87,9 +111,9 @@ Sorry, your browser does not support SVG.</object>
 </div>
 </div>
 
-<div id="outline-container-orgc7b524b" class="outline-3">
-<h3 id="orgc7b524b">Svarforskelle</h3>
-<div class="outline-text-3" id="text-orgc7b524b">
+<div id="outline-container-org04b99ea" class="outline-3">
+<h3 id="org04b99ea">Svarforskelle</h3>
+<div class="outline-text-3" id="text-org04b99ea">
 <p>
 Afstanden mellem to kandidater kan beregnes som de samlede ændringer der skal laves for at komme fra den ene kandidats svar til den andens. Hvis kandidat A har svaret "helt enig" og kandidat B har svaret "lidt uenig" er forskellen på det spørgsmål 3 (2 - (-1)). Den forskel beregnes for alle spørgsmål og tallene lægges sammen.  
 Hvis to kandidater kun adskiller sig ved at være hhv. lidt eller helt (u)enige i spørgsmålene er deres maksimale afstand 25. To komplet uenige kandidater der aldrig er lidt (u)enige i noget men altid vælger yderpunkterne vil have en afstand på 100.
@@ -117,7 +141,7 @@ De to kanidater der er mest uenige på tværs af partier er <a href="https://www
 <div id="text-footnotes">
 
 <div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
-Der er desuden en række indevendinger man fuldstændig rimeligt kunne lave i forhold til analysens valg - f.eks. er manglende værdier i datasættet i vid udstrækning blog ignoreret, hvor en mere grundig analyse ville kigge på og tage hensyn til omfanget af manglende data.
+Der er desuden en række indevendinger man fuldstændig rimeligt kunne lave i forhold til analysens valg &#x2013; f.eks. er manglende værdier i datasættet i vid udstrækning blog ignoreret, hvor en mere grundig analyse ville kigge på og tage hensyn til omfanget af manglende data.
 </p></div></div>
 
 

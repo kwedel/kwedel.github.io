@@ -26,14 +26,21 @@
     </style>
 </head>
 <body>
- <div id="outline-container-org23cdb5b" class="outline-2">
-<h2 id="org23cdb5b">Kandidattest 2022 &#x2013; Et dyk ned i dataen</h2>
-<div class="outline-text-2" id="text-org23cdb5b">
+<div id="outline-container-org7cf5061" class="outline-2">
+<h2 id="org7cf5061">Kandidattest 2022 &#x2013; Et dyk ned i dataen</h2>
+<div class="outline-text-2" id="text-org7cf5061">
 <blockquote>
 <p>
 <b>BEMÆRK:</b> Som det meste anden politisk analyse er det følgende at betragte som <i>underholdning</i> og må ikke tages som et udtryk for nogen dybere forståelse af det politiske landskab.<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
 </p>
 </blockquote>
+
+
+<div class="figure">
+<p><object type="image/svg+xml" data="images/tsne.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
 
 <p>
 Så nærmer valget sig og endnu engang har DR og Altinget gjort det nemt at vælge hvem man skal stemme på: man tager simpelthen en <a href="https://www.dr.dk/nyheder/politik/folketingsvalg/kandidattest">test</a> og så er den klaret.
@@ -41,9 +48,9 @@ Men det betyder også at de har samlet et datasæt der bøde indeholder demograf
 </p>
 </div>
 
-<div id="outline-container-org57deb4b" class="outline-3">
-<h3 id="org57deb4b">Partiernes gennemsnitsholdning</h3>
-<div class="outline-text-3" id="text-org57deb4b">
+<div id="outline-container-orgbbebd9e" class="outline-3">
+<h3 id="orgbbebd9e">Partiernes gennemsnitsholdning</h3>
+<div class="outline-text-3" id="text-orgbbebd9e">
 <p>
 Alle kandidater har svaret individuelt, men det kan være interessant at se hvordan holdningerne fordeler sig inden for de enkelte partier. Den følgende figur viser gennemsnits-svaret for hvert af partierne på hvert af de 25 spørgsmål i testen. Svarene er beregnet sådan at de fire muligheder, uenig, lidt uenig, lidt enig og enig er blevet omregnet til værdier -2, -1, 1 og 2 hvorefter gennemsnittet er beregnet.
 <object type="image/svg+xml" data="images/gennemsnitssvar.svg" class="org-svg">
@@ -52,21 +59,56 @@ Sorry, your browser does not support SVG.</object>
 </div>
 </div>
 
-<div id="outline-container-org1d46150" class="outline-3">
-<h3 id="org1d46150">Partiernes sammensætning</h3>
-<div class="outline-text-3" id="text-org1d46150">
+<div id="outline-container-org55bf0b8" class="outline-3">
+<h3 id="org55bf0b8">Partiernes sammensætning</h3>
+<div class="outline-text-3" id="text-org55bf0b8">
 <p>
-Datasættet indeholder også data om kandidaternes alder og uddannelsesniveau.
+Datasættet indeholder også data om kandidaternes alder og uddannelsesniveau. Hvis vi starter med uddannelsen kan vi se at de radikale virkelig har fået brugt noget tid på uddannelsesinstitutionerne. Omvendt synes det ikke at være der tiden er brugt blandt den del af højrefløjen der har det lidt svært med folk fra udlandet.
 <object type="image/svg+xml" data="images/education_length.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
+</p>
+
+<p>
+Når vi kigger på <a href="https://www.dr.dk/nyheder/politik/folketingsvalg/din-stemmeseddel/kandidater/712-inger-stoejberg">Inger Støjbergs</a> nye parti kompenserer de de kortere uddannelser med til gengæld at være +gamle+livserfarne. Partiet med den højeste gennemsnitsalder på 52 år er i snit hele 18 år ældre end ynglingene fra Frie Grønne.
 <object type="image/svg+xml" data="images/mean_age.svg" class="org-svg">
 Sorry, your browser does not support SVG.</object>
 </p>
 </div>
 </div>
-<div id="outline-container-org4086372" class="outline-3">
-<h3 id="org4086372">Next</h3>
-<div class="outline-text-3" id="text-org4086372">
+
+<div id="outline-container-orgbf8fc0b" class="outline-3">
+<h3 id="orgbf8fc0b">Skråsikkerhed</h3>
+<div class="outline-text-3" id="text-orgbf8fc0b">
+<p>
+Vi kan definere skråsikkerheden som den andel af svar hvor kandidaten er enten helt enig eller helt uenig. Lars Løkke og Mette Frederiksen har ikke svaret på spørgsmålene, hvorfor de vises med skårsikkerhed nul.
+<object type="image/svg+xml" data="images/leader_certainty.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc7b524b" class="outline-3">
+<h3 id="orgc7b524b">Svarforskelle</h3>
+<div class="outline-text-3" id="text-orgc7b524b">
+<p>
+Afstanden mellem to kandidater kan beregnes som de samlede ændringer der skal laves for at komme fra den ene kandidats svar til den andens. Hvis kandidat A har svaret "helt enig" og kandidat B har svaret "lidt uenig" er forskellen på det spørgsmål 3 (2 - (-1)). Den forskel beregnes for alle spørgsmål og tallene lægges sammen.  
+Hvis to kandidater kun adskiller sig ved at være hhv. lidt eller helt (u)enige i spørgsmålene er deres maksimale afstand 25. To komplet uenige kandidater der aldrig er lidt (u)enige i noget men altid vælger yderpunkterne vil have en afstand på 100.
+</p>
+
+<p>
+Ved at udregne forskellene mellem alle kandidaterne i samme parti kan vi se hvor stor enighed der er internt i partierne, hvilket kan ses på den nedenstående figur.
+Frie Grønne og Nye Borgerlige har begge meget stor grad af konsensus bland deres kandidater mens Kristendemokraterne og Moderaterne huser noget mere varierede holdninger.
+<object type="image/svg+xml" data="images/differences.svg" class="org-svg">
+Sorry, your browser does not support SVG.</object>
+</p>
+
+<p>
+I Socialdemokratiet finder vi de to kandidater der er mest uenige, men stadig stiller op for samme parti. Det drejer sig om <a href="https://www.dr.dk/nyheder/politik/folketingsvalg/din-stemmeseddel/kandidater/822">Bjørn Bøje Brandenborg</a> og <a href="https://www.dr.dk/nyheder/politik/folketingsvalg/din-stemmeseddel/kandidater/827">Mette Reissmann</a> som har en indbyrdes aftand på 52.
+</p>
+
+<p>
+De to kanidater der er mest uenige på tværs af partier er <a href="https://www.dr.dk/nyheder/politik/folketingsvalg/din-stemmeseddel/kandidater/847">Clara Turms</a> fra Enhedslisten og <a href="https://www.dr.dk/nyheder/politik/folketingsvalg/din-stemmeseddel/kandidater/180">Thomas Vedsted</a> fra Nye Borgerlige. Deres indbyrdes afstand er 88.
+</p>
 </div>
 </div>
 </div>

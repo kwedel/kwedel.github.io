@@ -71,7 +71,7 @@ Datasættet viser at selvom der er mange partierne har de faktisk alle sammen de
 <div id="vis"></div>
   <script>
     const spec = "assets/altair.json";
-  	vegaEmbed("#vis", spec)
+    vegaEmbed("#vis", spec, {'loader': {'target':'_blank'}})
     	// result.view provides access to the Vega View API
       .then(result => console.log(result))
       .catch(console.warn);

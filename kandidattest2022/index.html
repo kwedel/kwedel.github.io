@@ -24,6 +24,9 @@
         line-height: 1.2
     }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.17.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
 <body>
 <div id="outline-container-org003c419" class="outline-2">
@@ -40,6 +43,8 @@ Så nærmer valget sig og endnu engang har DR og Altinget gjort det nemt at væl
 Men det betyder også at de har samlet et datasæt der både indeholder demografisk information om kandidaterne og hvor størstedelen af folketingskandidaterne har svaret på politiske spørgsmål. Det data kan vi kigge nærmere på og måske lære noget om partierne og kandidaterne.
 Ligesom <a href="https://kwedel.github.io/kandidattest2019/">sidste gang</a> har jeg scrapet alle svarene og det følgende er nogle af de pointer der kan trækkes ud af datasættet.
 </p>
+
+
 
 <p>
 I figuren med alle de små cirkler er alle kandidaterne placeret så de er i nærheden af andre de er enige med og langt fra dem de er uenige med. Desuden afspejler højre-venstre aksen <i>omtrentligt</i> den kombination af spørgsmålene hvor der er størst varians blandt kandidaterne. De tre holdninger der bidrager mest til at være mod højre i figuren er
@@ -63,12 +68,15 @@ På den anden akse er de holdninger der bidrager mest til at være oppe
 Datasættet viser at selvom der er mange partierne har de faktisk alle sammen deres egne kombinationer af holdninger der adskiller dem fra de andre. Ved <a href="https://kwedel.github.io/kandidattest2019/">sidste valg</a> var Konservative og Venstre meget svære at skille ad, men i år ser det ud til at Konservative har bevæget sig mere i retning af Liberal Alliance og væk fra Venstre.
 </p>
 
+<div id="vis"></div>
+  <script>
+    const spec = "assets/altair.json";
+  	vegaEmbed("#vis", spec)
+    	// result.view provides access to the Vega View API
+      .then(result => console.log(result))
+      .catch(console.warn);
+  </script>
 
-<div class="figure">
-<p><object type="image/svg+xml" data="images/tsne.svg" class="org-svg">
-Sorry, your browser does not support SVG.</object>
-</p>
-</div>
 </div>
 
 
